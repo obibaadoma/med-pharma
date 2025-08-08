@@ -239,4 +239,4 @@ This solution provides a complete, working implementation of the Medpharma queue
 
 The system can be easily extended with additional features and integrated with more robust data storage solutions for production use.
 
-The Fast Refresh warning that may occur during development (as explained in the Next.js documentation) happens when files have multiple exports besides React components, use anonymous functions, or have component names in camelCase instead of PascalCase. This is a development-time feature and doesn't affect the production functionality of the application.
+The Fast Refresh warning that may occur during development happens when files have multiple exports besides React components, use anonymous functions, or have component names in camelCase instead of PascalCase. This is a development-time feature and doesn't affect the production functionality of the application.

@@ -5,7 +5,7 @@ export class Doctor {
   isAvailable!: boolean;
   currentAppointmentId?: string;
   averageConsultationTime!: number;
-  lastAppointmentEndTime?: Date;  // Track when last appointment ended
-  scheduledStartTime?: Date;      // Doctor's scheduled start time
-  actualStartTime?: Date;         // When doctor actually started
+  lastAppointmentEndTime?: Date; // Track when last appointment ended
+  scheduledStartTime?: Date; // Doctor's scheduled start time
+  actualStartTime?: Date; // When doctor actually started
 }
