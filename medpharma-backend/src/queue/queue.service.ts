@@ -58,3 +58,23 @@ export class QueueService {
     });
   }
 }
+
+getQueueStatistics(doctorId: string): { 
+  totalWaiting: number; 
+  averageWaitTime: number; 
+  longestWaitTime: number 
+} {
+  const queue = this.getQueueForDoctor(doctorId);
+  const waitingPatients = queue.filter(appt => appt.status === 'waiting');
+  
+  const totalWaiting = waitingPatients.length;
+  const averageWaitTime = totalWaiting > 0 
+    ? waitingPatients.reduce((sum, appt) => sum + (appt.estimatedWaitTime || 0), 0) / totalWaiting
+    : 0;
+  
+  const longestWaitTime = totalWaiting > 0
+    ? Math.max(...waitingPatients.map(appt => appt.estimatedWaitTime || 0))
+    : 0;
+  
+  return { totalWaiting, averageWaitTime, longestWaitTime };
+}

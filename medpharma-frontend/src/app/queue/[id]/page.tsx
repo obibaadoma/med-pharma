@@ -15,6 +15,7 @@ export default function QueueStatusPage({ params }: { params: { id: string } }) 
   const [estimatedWaitTime, setEstimatedWaitTime] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [notification, setNotification] = useState<string | null>(null)
+  const [cancelling, setCancelling] = useState(false)
   
   useEffect(() => {
     if (id) {
@@ -76,6 +77,25 @@ export default function QueueStatusPage({ params }: { params: { id: string } }) 
       case 'completed': return 'bg-blue-100 text-blue-800'
       case 'cancelled': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+  
+  // NEW: Cancellation function
+  const handleCancelAppointment = async () => {
+    if (!id || !window.confirm('Are you sure you want to cancel this appointment?')) {
+      return
+    }
+    
+    setCancelling(true)
+    try {
+      await appointmentApi.cancel(id)
+      alert('Appointment cancelled successfully')
+      router.push('/')
+    } catch (error) {
+      console.error('Error cancelling appointment:', error)
+      alert('Failed to cancel appointment. Please try again.')
+    } finally {
+      setCancelling(false)
     }
   }
   
@@ -184,6 +204,18 @@ export default function QueueStatusPage({ params }: { params: { id: string } }) 
             >
               Book New Appointment
             </button>
+            
+            {/* NEW: Cancel Appointment Button */}
+            {appointment.status !== 'cancelled' && appointment.status !== 'completed' && (
+              <button
+                onClick={handleCancelAppointment}
+                disabled={cancelling}
+                className="px-4 py-2 bg-red-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                {cancelling ? 'Cancelling...' : 'Cancel Appointment'}
+              </button>
+            )}
+            
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700"
