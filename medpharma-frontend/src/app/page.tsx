@@ -1,64 +1,64 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { appointmentApi, doctorApi } from '../lib/api'
-import { Doctor } from '../lib/types'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { appointmentApi, doctorApi } from '../lib/api';
+import { Doctor } from '../lib/types';
 
 export default function BookingPage() {
-  const router = useRouter()
-  const [name, setName] = useState('')
-  const [doctors, setDoctors] = useState<Doctor[]>([])
-  const [selectedDoctor, setSelectedDoctor] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
-  
+  const router = useRouter();
+  const [name, setName] = useState('');
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [selectedDoctor, setSelectedDoctor] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   useEffect(() => {
-    fetchDoctors()
-  }, [])
-  
+    fetchDoctors();
+  }, []);
+
   const fetchDoctors = async () => {
     try {
-      const response = await doctorApi.getAll()
-      setDoctors(response.data)
+      const response = await doctorApi.getAll();
+      setDoctors(response.data);
       if (response.data.length > 0) {
-        setSelectedDoctor(response.data[0].id)
+        setSelectedDoctor(response.data[0].id);
       }
     } catch (error) {
-      console.error('Error fetching doctors:', error)
+      console.error('Error fetching doctors:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
-  
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim() || !selectedDoctor) return
-    
-    setSubmitting(true)
+    e.preventDefault();
+    if (!name.trim() || !selectedDoctor) return;
+
+    setSubmitting(true);
     try {
       const response = await appointmentApi.create({
         patientName: name.trim(),
         doctorId: selectedDoctor,
-      })
-      
-      router.push(`/queue/${response.data.id}`)
+      });
+
+      router.push(`/queue/${response.data.id}`);
     } catch (error) {
-      console.error('Error booking appointment:', error)
-      alert('Failed to book appointment. Please try again.')
+      console.error('Error booking appointment:', error);
+      alert('Failed to book appointment. Please try again.');
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
-  
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Loading...</div>
       </div>
-    )
+    );
   }
-  
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -70,7 +70,7 @@ export default function BookingPage() {
             Join the queue for your online consultation
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -83,12 +83,12 @@ export default function BookingPage() {
                 type="text"
                 required
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={e => setName(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Full Name"
               />
             </div>
-            
+
             <div>
               <label htmlFor="doctor" className="sr-only">
                 Select Doctor
@@ -98,10 +98,10 @@ export default function BookingPage() {
                 name="doctor"
                 required
                 value={selectedDoctor}
-                onChange={(e) => setSelectedDoctor(e.target.value)}
+                onChange={e => setSelectedDoctor(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
               >
-                {doctors.map((doctor) => (
+                {doctors.map(doctor => (
                   <option key={doctor.id} value={doctor.id}>
                     {doctor.name} - {doctor.specialty}
                   </option>
@@ -109,7 +109,7 @@ export default function BookingPage() {
               </select>
             </div>
           </div>
-          
+
           <div>
             <button
               type="submit"
@@ -122,5 +122,5 @@ export default function BookingPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }

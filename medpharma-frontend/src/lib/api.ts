@@ -11,27 +11,22 @@ const api = axios.create({
 });
 
 export const appointmentApi = {
-  create: (data: { patientName: string; doctorId: string }) => 
+  create: (data: { patientName: string; doctorId: string }) =>
     api.post<Appointment>('/appointments', data),
-  
-  get: (id: string) => 
-    api.get<Appointment>(`/appointments/${id}`),
-  
-  updateStatus: (id: string, status: Appointment['status']) => 
+
+  get: (id: string) => api.get<Appointment>(`/appointments/${id}`),
+
+  updateStatus: (id: string, status: Appointment['status']) =>
     api.put(`/appointments/${id}/status`, { status }),
-  
+
   // NEW: Cancellation method
-  cancel: (id: string) => 
-    api.delete(`/appointments/${id}`),
+  cancel: (id: string) => api.delete(`/appointments/${id}`),
 };
 
 export const doctorApi = {
-  getAll: () => 
-    api.get<Doctor[]>('/doctors'),
-  
-  get: (id: string) => 
-    api.get<Doctor>(`/doctors/${id}`),
-  
-  getQueue: (id: string) => 
-    api.get(`/doctors/${id}/queue`),
+  getAll: () => api.get<Doctor[]>('/doctors'),
+
+  get: (id: string) => api.get<Doctor>(`/doctors/${id}`),
+
+  getQueue: (id: string) => api.get(`/doctors/${id}/queue`),
 };

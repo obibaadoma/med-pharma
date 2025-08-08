@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -12,7 +12,7 @@ interface State {
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError(_: Error): State {
